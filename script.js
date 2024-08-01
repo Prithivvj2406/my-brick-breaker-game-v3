@@ -83,6 +83,11 @@ let startTime = null;
 const gameIcon = new Image();
 gameIcon.src = "assets/Game_Icon_Image.png";
 
+// Load Game Sounds
+const paddleHitSound = new Audio("assets/paddle_bounce.mp3");
+const wallHitSound = new Audio("assets/wall_bounce.mp3");
+const brickBreakSound = new Audio("assets/brick_break.mp3");
+
 // Draw start screen
 function draw_start_screen() {
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
@@ -155,8 +160,14 @@ function ball_dynamics() {
     ball.y += ball.dy;
 
     // Ball collision with walls
-    if (ball.x <= 0 || ball.x >= WIDTH) ball.dx = -ball.dx;
-    if (ball.y <= 0) ball.dy = -ball.dy;
+    if (ball.x <= 0 || ball.x >= WIDTH) {
+        ball.dx = -ball.dx;
+        wallHitSound.play();
+    }
+    if (ball.y <= 0) {
+        ball.dy = -ball.dy;
+        wallHitSound.play();
+    }
     if (ball.y >= HEIGHT) {
         gameOver = true;
         draw_end_screen("Game Over!");
@@ -189,6 +200,7 @@ function detect_paddle_collision() {
     ) {
         ball.dy = -ball.dy;
         ball.y = paddle.y - ball.size / 2;
+        paddleHitSound.play();
     }
 }
 
@@ -211,6 +223,7 @@ function detect_brick_collision() {
             }
 
             score += brick.points;
+            brickBreakSound.play();
             add_score_bubble(brick.points, brick.color);
 
             return false;
