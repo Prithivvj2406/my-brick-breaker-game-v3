@@ -88,6 +88,10 @@ const paddleHitSound = new Audio("assets/paddle_bounce.mp3");
 const wallHitSound = new Audio("assets/wall_bounce.mp3");
 const brickBreakSound = new Audio("assets/brick_break.mp3");
 
+// Game Results sounds
+const gameoverSound = new Audio("assets/wall_bounce.mp3");
+const gamewinSound = new Audio("assets/brick_break.mp3");
+
 // Draw start screen
 function draw_start_screen() {
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
@@ -142,7 +146,6 @@ function draw_end_screen(message) {
     ctx.font = "30px Helvetica";
     ctx.fillText(`Score: ${score}`, WIDTH / 2, HEIGHT / 2 + 25);
 }
-
 
 // Move paddle
 function move_paddle(event) {
@@ -252,7 +255,7 @@ function detect_brick_collision() {
 function add_score_bubble(scoreIncrement, color) {
     scoreBubbles.push({
         color: color,
-        scoreText: +${scoreIncrement},
+        scoreText: `+${scoreIncrement}`,
         startTime: Date.now()
     });
 }
@@ -284,7 +287,7 @@ function draw_score_bubbles() {
 function update_dev_mode_display() {
     const devModeDiv = document.getElementById('devModeDiv');
     if ((DEV_MODE === 1 || DEV_MODE === 2 || DEV_MODE === 3) && !startScreen) {
-        devModeDiv.textContent = DEV_MODE: ${DEV_MODE};
+        devModeDiv.textContent = `DEV_MODE: ${DEV_MODE}`;
         devModeDiv.style.display = 'block';
     } else {
         devModeDiv.style.display = 'none';
@@ -295,7 +298,7 @@ function update_dev_mode_display() {
 function update_bricks_remaining_display() {
     const bricksRemainingDiv = document.getElementById('bricksRemainingDiv');
     if ((DEV_MODE === 1 || DEV_MODE === 2 || DEV_MODE === 3) && !startScreen) {
-        bricksRemainingDiv.textContent = Bricks Remaining: ${bricks.length};
+        bricksRemainingDiv.textContent = `Bricks Remaining: ${bricks.length}`;
         bricksRemainingDiv.style.display = 'block';
     } else {
         bricksRemainingDiv.style.display = 'none';
@@ -308,7 +311,7 @@ function update_elapsed_time_display() {
     if (DEV_MODE === 3 && !startScreen) {
         const currentTime = Date.now();
         const elapsedSeconds = ((currentTime - startTime) / 1000).toFixed(3);
-        elapsedTimeDiv.textContent = Time Elapsed: ${elapsedSeconds}s;
+        elapsedTimeDiv.textContent = `Time Elapsed: ${elapsedSeconds}s`;
         elapsedTimeDiv.style.display = 'block';
     } else {
         elapsedTimeDiv.style.display = 'none';
