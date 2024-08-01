@@ -22,7 +22,7 @@ const BUBBLE_DURATION = 1000; // Duration for score bubbles
 const PADDLE_DELAY = 250; // Delay in milliseconds for paddle movement in DEV_MODE 2 and 3
 const PADDLE_WIDTH = 100;
 const PADDLE_HEIGHT = 20;
-const DEV_MODE = 3; // Set the desired DEV_MODE here
+const DEV_MODE = 1; // Set the desired DEV_MODE here
 
 // Brick configuration based on DEV_MODE
 let BRICK_ROWS = 5;
