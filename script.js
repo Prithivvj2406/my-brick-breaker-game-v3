@@ -144,8 +144,16 @@ function draw_end_screen(message) {
     ctx.textAlign = "center";
     ctx.fillText(message, WIDTH / 2, HEIGHT / 2 - 25);
     ctx.font = "30px Helvetica";
-    ctx.fillText(Score: ${score}, WIDTH / 2, HEIGHT / 2 + 25);
+    ctx.fillText(`Score: ${score}`, WIDTH / 2, HEIGHT / 2 + 25);
+
+    // Play the appropriate sound based on the message
+    if (message === "You Win!") {
+        gamewinSound.play();
+    } else if (message === "Game Over!") {
+        gameoverSound.play();
+    }
 }
+
 
 // Move paddle
 function move_paddle(event) {
