@@ -156,37 +156,52 @@ function move_paddle(event) {
     }
 }
 
-// Ball dynamics
+// Ensure sounds play only after user interaction
+let userInteracted = false;
+
+// Start screen event listener
+canvas.addEventListener("click", () => {
+    if (startScreen) {
+        startScreen = false;
+        userInteracted = true; // Set to true after user interaction
+        testSound.play(); // Play sound only after interaction
+        canvas.removeEventListener("click", draw_start_screen);
+    }
+});
+
+// Ball dynamics function
 function ball_dynamics() {
-    ball.x += ball.dx;
-    ball.y += ball.dy;
+    if (userInteracted) { // Play sounds only if user has interacted
+        ball.x += ball.dx;
+        ball.y += ball.dy;
 
-    // Ball collision with walls
-    if (ball.x <= 0 || ball.x >= WIDTH) {
-        ball.dx = -ball.dx;
-        wallHitSound.play();
-    }
-    if (ball.y <= 0) {
-        ball.dy = -ball.dy;
-        wallHitSound.play();
-    }
-    if (ball.y >= HEIGHT) {
-        gameOver = true;
-        draw_end_screen("Game Over!");
-        return;
-    }
+        // Ball collision with walls
+        if (ball.x <= 0 || ball.x >= WIDTH) {
+            ball.dx = -ball.dx;
+            wallHitSound.play();
+        }
+        if (ball.y <= 0) {
+            ball.dy = -ball.dy;
+            wallHitSound.play();
+        }
+        if (ball.y >= HEIGHT) {
+            gameOver = true;
+            draw_end_screen("Game Over!");
+            return;
+        }
 
-    // Paddle movement in DEV_MODE 2 and 3
-    if (DEV_MODE === 2 || DEV_MODE === 3) {
-        setTimeout(() => {
-            paddle.x += ball.dx;
-            if (paddle.x < 0) paddle.x = 0;
-            if (paddle.x + PADDLE_WIDTH > WIDTH) paddle.x = WIDTH - PADDLE_WIDTH;
-        }, PADDLE_DELAY);
-    }
+        // Paddle movement in DEV_MODE 2 and 3
+        if (DEV_MODE === 2 || DEV_MODE === 3) {
+            setTimeout(() => {
+                paddle.x += ball.dx;
+                if (paddle.x < 0) paddle.x = 0;
+                if (paddle.x + PADDLE_WIDTH > WIDTH) paddle.x = WIDTH - PADDLE_WIDTH;
+            }, PADDLE_DELAY);
+        }
 
-    detect_paddle_collision();
-    detect_brick_collision();
+        detect_paddle_collision();
+        detect_brick_collision();
+    }
 }
 
 // Detect collision with paddle
