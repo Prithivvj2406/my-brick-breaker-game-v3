@@ -1,0 +1,36 @@
+body {
+    background-color: #8FD3C1; /* Light Green */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+canvas {
+    background: white;
+    display: block;
+}
+
+#devModeDiv, #bricksRemainingDiv, #elapsedTimeDiv {
+    position: absolute;
+    color: black;
+    font-size: 18px;
+}
+
+#devModeDiv {
+    top: 10px;
+    left: 10px;
+}
+
+#bricksRemainingDiv {
+    top: 10px;
+    right: 10px;
+}
+
+#elapsedTimeDiv {
+    bottom: 10px;
+    left: 10px;
+}
