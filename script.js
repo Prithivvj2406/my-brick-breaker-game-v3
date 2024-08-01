@@ -145,10 +145,10 @@ function draw_end_screen(message) {
     ctx.fillText(message, WIDTH / 2, HEIGHT / 2 - 25);
     ctx.font = "30px Helvetica";
     ctx.fillText(`Score: ${score}`, WIDTH / 2, HEIGHT / 2 + 25);
-    if message == "Wou Win!":{
+    if message === "Wou Win!":{
         gamewinSound.play()
     }
-    else:{
+    else if message === "Game Over!":{
         gamewinSound.play()
     }
 }
