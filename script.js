@@ -88,6 +88,10 @@ const paddleHitSound = new Audio("assets/paddle_bounce.mp3");
 const wallHitSound = new Audio("assets/wall_bounce.mp3");
 const brickBreakSound = new Audio("assets/brick_break.mp3");
 
+// Game Results sounds
+const gameoverSound = new Audio("assets/game_over.mp3");
+const gamewinSound = new Audio("assets/win_sound.mp3");
+
 // Draw start screen
 function draw_start_screen() {
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
@@ -141,6 +145,12 @@ function draw_end_screen(message) {
     ctx.fillText(message, WIDTH / 2, HEIGHT / 2 - 25);
     ctx.font = "30px Helvetica";
     ctx.fillText(`Score: ${score}`, WIDTH / 2, HEIGHT / 2 + 25);
+    if message == "Wou Win!":{
+        gamewinSound.play()
+    }
+    else:{
+        gamewinSound.play()
+    }
 }
 
 // Move paddle
