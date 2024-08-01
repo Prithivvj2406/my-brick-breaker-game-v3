@@ -12,7 +12,7 @@ const colorCyan = "#00FFFF";
 // Constants and configuration
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
-const BALL_SPEED = 3;
+const BALL_SPEED = 5;
 const BALL_SIZE = 20;
 const BRICK_HEIGHT = 20;
 const BRICK_COLORS = [colorRed, colorOrange, colorYellow, colorGreen, colorCyan];
@@ -22,7 +22,7 @@ const BUBBLE_DURATION = 1000; // Duration for score bubbles
 const PADDLE_DELAY = 250; // Delay in milliseconds for paddle movement in DEV_MODE 2 and 3
 const PADDLE_WIDTH = 100;
 const PADDLE_HEIGHT = 20;
-const DEV_MODE = 3; // Set the desired DEV_MODE here
+const DEV_MODE = 0; // Set the desired DEV_MODE here
 
 // Brick configuration based on DEV_MODE
 let BRICK_ROWS = 5;
