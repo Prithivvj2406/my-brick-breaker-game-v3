@@ -88,8 +88,6 @@ const paddleHitSound = new Audio("assets/paddle_bounce.wav");
 const wallHitSound = new Audio("assets/wall_bounce.wav");
 const brickBreakSound = new Audio("assets/brick_break.wav");
 
-const testSound = new Audio("assets/startup_music.mp3");
-
 // Draw start screen
 function draw_start_screen() {
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
@@ -320,7 +318,6 @@ function update_elapsed_time_display() {
 function gameLoop() {
     if (!startScreen && !gameOver) {
         if (!startTime) startTime = Date.now();
-        brickBreakSound.play();
         ball_dynamics();
         draw_game_screen();
         update_bricks_remaining_display();
