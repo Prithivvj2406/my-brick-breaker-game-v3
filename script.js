@@ -89,8 +89,8 @@ const wallHitSound = new Audio("assets/wall_bounce.mp3");
 const brickBreakSound = new Audio("assets/brick_break.mp3");
 
 // Game Results sounds
-const gameoverSound = new Audio("assets/game_over.mp3");
-const gamewinSound = new Audio("assets/win_sound.mp3");
+const gameoverSound = new Audio("assets/wall_bounce.mp3");
+const gamewinSound = ew Audio("assets/brick_break.mp3");
 
 // Draw start screen
 function draw_start_screen() {
