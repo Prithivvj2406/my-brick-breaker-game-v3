@@ -320,7 +320,7 @@ function update_elapsed_time_display() {
 function gameLoop() {
     if (!startScreen && !gameOver) {
         if (!startTime) startTime = Date.now();
-        testSound.play();
+        brickBreakSound.play();
         ball_dynamics();
         draw_game_screen();
         update_bricks_remaining_display();
