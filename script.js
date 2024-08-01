@@ -92,18 +92,6 @@ const brickBreakSound = new Audio("assets/brick_break.mp3");
 const gameoverSound = new Audio("assets/wall_bounce.mp3");
 const gamewinSound = new Audio("assets/brick_break.mp3");
 
-// Ensure sounds play only after user interaction
-let userInteracted = false;
-
-// Add sound for game results
-function play_game_result_sound(message) {
-    if (message === "You Win!") {
-        gamewinSound.play();
-    } else {
-        gameoverSound.play();
-    }
-}
-
 // Draw start screen
 function draw_start_screen() {
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
@@ -156,7 +144,7 @@ function draw_end_screen(message) {
     ctx.textAlign = "center";
     ctx.fillText(message, WIDTH / 2, HEIGHT / 2 - 25);
     ctx.font = "30px Helvetica";
-    ctx.fillText(`Score: ${score}`, WIDTH / 2, HEIGHT / 2 + 25);
+    ctx.fillText(Score: ${score}, WIDTH / 2, HEIGHT / 2 + 25);
 }
 
 // Move paddle
@@ -170,11 +158,15 @@ function move_paddle(event) {
     }
 }
 
+// Ensure sounds play only after user interaction
+let userInteracted = false;
+
 // Start screen event listener
 canvas.addEventListener("click", () => {
     if (startScreen) {
         startScreen = false;
         userInteracted = true; // Set to true after user interaction
+        testSound.play(); // Play sound only after interaction
         canvas.removeEventListener("click", draw_start_screen);
     }
 });
@@ -196,7 +188,6 @@ function ball_dynamics() {
         }
         if (ball.y >= HEIGHT) {
             gameOver = true;
-            play_game_result_sound("Game Over!");
             draw_end_screen("Game Over!");
             return;
         }
@@ -241,71 +232,89 @@ function detect_brick_collision() {
             ball.y + ball.size / 2 > brick.y &&
             ball.y - ball.size / 2 < brick.y + brick.height
         ) {
-            ball.dy = -ball.dy;
-            score += brick.points; // Add brick points to score
+            const overlapX = Math.min(ball.x + ball.size / 2 - brick.x, brick.x + brick.width - ball.x + ball.size / 2);
+            const overlapY = Math.min(ball.y + ball.size / 2 - brick.y, brick.y + brick.height - ball.y + ball.size / 2);
+
+            if (overlapX < overlapY) {
+                ball.dx = -ball.dx;
+            } else {
+                ball.dy = -ball.dy;
+            }
+
+            score += brick.points;
             brickBreakSound.play();
-            create_score_bubble(brick);
+            add_score_bubble(brick.points, brick.color);
+
             return false;
         }
         return true;
     });
 }
 
-// Create a score bubble
-function create_score_bubble(brick) {
-    const bubble = {
-        x: brick.x + brick.width / 2,
-        y: brick.y + brick.height / 2,
-        points: brick.points,
+// Add score bubble
+function add_score_bubble(scoreIncrement, color) {
+    scoreBubbles.push({
+        color: color,
+        scoreText: +${scoreIncrement},
         startTime: Date.now()
-    };
-    scoreBubbles.push(bubble);
+    });
 }
 
 // Draw score bubbles
 function draw_score_bubbles() {
     const currentTime = Date.now();
     scoreBubbles = scoreBubbles.filter(bubble => {
-        const elapsed = currentTime - bubble.startTime;
-        if (elapsed < BUBBLE_DURATION) {
-            ctx.font = "20px Helvetica";
-            ctx.fillStyle = "black";
+        const elapsedTime = currentTime - bubble.startTime;
+        if (elapsedTime < BUBBLE_DURATION) {
+            const x = WIDTH - BUBBLE_RADIUS - 20;
+            const y = HEIGHT - BUBBLE_RADIUS - 20;
+            ctx.fillStyle = bubble.color;
+            ctx.beginPath();
+            ctx.arc(x, y, BUBBLE_RADIUS, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "white";
+            ctx.font = "20px Helvetica bold";
             ctx.textAlign = "center";
-            ctx.fillText(bubble.points, bubble.x, bubble.y - (elapsed / BUBBLE_DURATION) * BUBBLE_RADIUS);
+            ctx.textBaseline = "middle";
+            ctx.fillText(bubble.scoreText, x, y);
             return true;
         }
         return false;
     });
 }
 
+// Update DEV_MODE display
+function update_dev_mode_display() {
+    const devModeDiv = document.getElementById('devModeDiv');
+    if ((DEV_MODE === 1 || DEV_MODE === 2 || DEV_MODE === 3) && !startScreen) {
+        devModeDiv.textContent = DEV_MODE: ${DEV_MODE};
+        devModeDiv.style.display = 'block';
+    } else {
+        devModeDiv.style.display = 'none';
+    }
+}
+
 // Update bricks remaining display
 function update_bricks_remaining_display() {
-    if (DEV_MODE === 1 || DEV_MODE === 3) {
-        ctx.font = "20px Helvetica";
-        ctx.fillStyle = "black";
-        ctx.textAlign = "left";
-        ctx.fillText(`Bricks Remaining: ${bricks.length}`, 10, 30);
+    const bricksRemainingDiv = document.getElementById('bricksRemainingDiv');
+    if ((DEV_MODE === 1 || DEV_MODE === 2 || DEV_MODE === 3) && !startScreen) {
+        bricksRemainingDiv.textContent = Bricks Remaining: ${bricks.length};
+        bricksRemainingDiv.style.display = 'block';
+    } else {
+        bricksRemainingDiv.style.display = 'none';
     }
 }
 
 // Update elapsed time display
 function update_elapsed_time_display() {
-    if (startTime) {
-        const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
-        ctx.font = "20px Helvetica";
-        ctx.fillStyle = "black";
-        ctx.textAlign = "right";
-        ctx.fillText(`Time: ${elapsedTime}s`, WIDTH - 10, 30);
-    }
-}
-
-// Update DEV_MODE display
-function update_dev_mode_display() {
-    if (startScreen) {
-        ctx.font = "20px Helvetica";
-        ctx.fillStyle = "black";
-        ctx.textAlign = "right";
-        ctx.fillText(`DEV_MODE: ${DEV_MODE}`, WIDTH - 10, HEIGHT - 10);
+    const elapsedTimeDiv = document.getElementById('elapsedTimeDiv');
+    if (DEV_MODE === 3 && !startScreen) {
+        const currentTime = Date.now();
+        const elapsedSeconds = ((currentTime - startTime) / 1000).toFixed(3);
+        elapsedTimeDiv.textContent = Time Elapsed: ${elapsedSeconds}s;
+        elapsedTimeDiv.style.display = 'block';
+    } else {
+        elapsedTimeDiv.style.display = 'none';
     }
 }
 
@@ -320,7 +329,6 @@ function gameLoop() {
         
         if (bricks.length === 0) {
             gameOver = true;
-            play_game_result_sound("You Win!");
             draw_end_screen("You Win!");
         }
     } else if (gameOver) {
@@ -336,9 +344,19 @@ function gameLoop() {
 
 // Event listeners
 canvas.addEventListener("mousemove", move_paddle);
+canvas.addEventListener("click", () => {
+    if (startScreen) {
+        startScreen = false;
+        canvas.removeEventListener("click", draw_start_screen);
+    }
+});
 
-// Initial call to start screen
-draw_start_screen();
+// Start the game
+gameIcon.onload = () => {
+    draw_start_screen();
+    gameLoop();
+};
 
-// Start the game loop
-gameLoop();
+gameIcon.onerror = () => {
+    console.error('Failed to load game icon image.');
+};
