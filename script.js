@@ -84,9 +84,9 @@ const gameIcon = new Image();
 gameIcon.src = "assets/Game_Icon_Image.png";
 
 // Load Game Sounds
-const paddleHitSound = new Audio("assets/paddle_bounce.wav");
-const wallHitSound = new Audio("assets/wall_bounce.wav");
-const brickBreakSound = new Audio("assets/brick_break.wav");
+const paddleHitSound = new Audio("assets/paddle_bounce.mp3");
+const wallHitSound = new Audio("assets/wall_bounce.mp3");
+const brickBreakSound = new Audio("assets/brick_break.mp3");
 
 // Draw start screen
 function draw_start_screen() {
